@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+   <record id="override_invoice_button" model="ir.ui.view">
+      <field name="name">sale.sale_views.inherit</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+         <xpath expr="//button[@class='btn-primary'][1]" position="replace">
+            <button name="create_invoice_button" string="Create Invoice" type="object" class="btn-primary" attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}"/>
+         </xpath>
+      </field>
+   </record>
+    <record id="model_tan_woo_create_invoice" model="ir.actions.server">
+        <field name="name">Auto workflow</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.create_invoice_button()</field>
+    </record>
+</odoo>
