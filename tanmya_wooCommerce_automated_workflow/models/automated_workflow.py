@@ -7,7 +7,7 @@ class SaleOrderAutomated(models.Model):
 
     woo_status = 'completed'
     
-    puredate =fields.Date(string="Invoice date",compute="_get_inv_date")
+    puredate =fields.Date(string="Invoice date",compute="_get_inv_date",store=True)
     @api.depends('date_order')
     def _get_inv_date(self):
         ret = None
