@@ -8,15 +8,6 @@ class SaleOrderAutomated(models.Model):
     woo_status = 'completed'
 
     
-    puredate =fields.Date(string="Invoice date",compute="_get_inv_date")
-    @api.depends('date_order')
-    def _get_inv_date(self):
-        if self.date_order:
-            rec_date_order2 = self.date_order + timedelta(hours=3)
-            rec_date_order_invoice = datetime(rec_date_order2.year, rec_date_order2.month, rec_date_order2.day)
-            self.puredate= rec_date_order_invoice
-        else:
-            self.puredate =None‏
 
     # def _get_journal_name(self):
     #     if self.payment_getway_id == 'Apple Pay':
