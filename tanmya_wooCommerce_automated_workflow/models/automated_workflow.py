@@ -36,7 +36,7 @@ class SaleOrderAutomated(models.Model):
                 rec_date_order=rec.date_order
                 # print('sale order--------------')
                 # print(rec_date_order)
-                rec_date_order2 = rec_date_order #+ timedelta(hours=diff_hour)
+                rec_date_order2 = rec_date_order + timedelta(hours=3)#diff_hour
                 # print('rec_date_order2--------------')
                 # print(rec_date_order2)
                 rec_date_order_invoice =  datetime(rec_date_order2.year , rec_date_order2.month , rec_date_order2.day )
