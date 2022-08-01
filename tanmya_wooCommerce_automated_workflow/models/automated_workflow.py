@@ -112,7 +112,7 @@ class SaleOrderAutomated(models.Model):
 
         except:
             self._cr.rollback()
-        self._cr.autocommit(True)
+        #self._cr.autocommit(True)
 
 
 
