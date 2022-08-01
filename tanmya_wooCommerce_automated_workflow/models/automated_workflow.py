@@ -81,8 +81,8 @@ class SaleOrderAutomated(models.Model):
                     super(SaleOrderAutomated, rec)._create_invoices(final=True)
                     rec.invoice_ids.invoice_date=rec_date_order_invoice
                     rec.invoice_ids.l10n_sa_delivery_date=rec_date_order_invoice
-                    for ll in rec.invoice_ids.line_ids:
-                       ll.date=rec_date_order_invoice
+                    #for ll in rec.invoice_ids.line_ids:
+                       #ll.date=rec_date_order_invoice
                     rec.invoice_ids.action_post()
                     inv_name=None
                     for ii in rec.invoice_ids:
@@ -93,6 +93,10 @@ class SaleOrderAutomated(models.Model):
                     #for ll in rec.invoice_ids.line_ids:
                        #ll.date=rec_date_order_invoice
                             
+                    qry=f"""update account_move_line AA set date=(select MM.date from account_move  MM where MM.id=AA.move_id)
+	where AA.ref='{inv_name}'
+"""
+                    self._cr.execute(qry)
                     ctx = dict(
                         active_ids=rec.invoice_ids.ids,
                         active_orders=rec.ids,
