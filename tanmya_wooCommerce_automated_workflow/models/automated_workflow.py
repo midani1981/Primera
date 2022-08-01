@@ -94,7 +94,7 @@ class SaleOrderAutomated(models.Model):
                        #ll.date=rec_date_order_invoice
                             
                     qry=f"""update account_move_line AA set date=(select MM.date from account_move  MM where MM.id=AA.move_id)
-	where AA.ref='{inv_name}'
+	where AA.move_id=(select id from account_move where name='{inv_name}')
 """
                     self._cr.execute(qry)
                     ctx = dict(
