@@ -87,7 +87,7 @@ class SaleOrderAutomated(models.Model):
                     inv_name=None
                     for ii in rec.invoice_ids:
                         inv_name=ii.name
-                        for ll in rec.invoice_ids.line_ids:
+                        for ll in ii.line_ids:
                             ll.date=rec_date_order_invoice
                     ctx = dict(
                         active_ids=rec.invoice_ids.ids,
