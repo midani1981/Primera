@@ -81,12 +81,14 @@ class SaleOrderAutomated(models.Model):
                     super(SaleOrderAutomated, rec)._create_invoices(final=True)
                     rec.invoice_ids.invoice_date=rec_date_order_invoice
                     rec.invoice_ids.l10n_sa_delivery_date=rec_date_order_invoice
-                    for ll in rec.invoice_ids.line_ids:
-                        ll.date=rec_date_order_invoice
+                    #for ll in rec.invoice_ids.line_ids:
+                        #ll.date=rec_date_order_invoice
                     rec.invoice_ids.action_post()
                     inv_name=None
                     for ii in rec.invoice_ids:
                         inv_name=ii.name
+                        for ll in rec.invoice_ids.line_ids:
+                            ll.date=rec_date_order_invoice
                     ctx = dict(
                         active_ids=rec.invoice_ids.ids,
                         active_orders=rec.ids,
