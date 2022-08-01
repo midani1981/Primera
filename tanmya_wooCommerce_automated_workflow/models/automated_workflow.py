@@ -80,6 +80,7 @@ class SaleOrderAutomated(models.Model):
 
                     super(SaleOrderAutomated, rec)._create_invoices(final=True)
                     rec.invoice_ids.invoice_date=rec_date_order_invoice
+                    rec.invoice_ids.l10n_sa_delivery_date=rec_date_order_invoice
                     rec.invoice_ids.action_post()
                     inv_name=None
                     for ii in rec.invoice_ids:
