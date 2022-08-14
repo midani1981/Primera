@@ -111,14 +111,14 @@ class SaleOrderAutomated(models.Model):
                                         	where aa.ref='{inv_name}' or aa.name='{inv_name}'
                     """
                   #  print(qry)
-                    self._cr.execute(qry)
+                 #   self._cr.execute(qry)
                     qry=f"""
                         update account_move_line aa
                         set date=(select MM.date from account_move  MM where  MM.id=aa.move_id)
                     	where aa.ref='{inv_name}' or aa.move_name='{inv_name}'
 """
                   #  print(qry)
-                    self._cr.execute(qry)
+                #    self._cr.execute(qry)
                     register_payment_wizard = self.env['account.payment.register'].with_context(ctx).create(
                         {
                             'amount': rec.invoice_ids.amount_residual,
