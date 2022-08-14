@@ -93,15 +93,32 @@ class SaleOrderAutomated(models.Model):
                     #for ll in rec.invoice_ids.line_ids:
                        #ll.date=rec_date_order_invoice
                             
-                    qry=f"""update account_move_line AA set date=(select MM.date from account_move  MM where MM.id=AA.move_id)
-	where AA.move_id=(select id from account_move where name='{inv_name}')
-"""
-                    self._cr.execute(qry)
+               #     qry=f"""update account_move_line AA set date=(select MM.date from account_move  MM where MM.id=AA.move_id)
+#	where AA.move_id=(select id from account_move where name='{inv_name}')
+# """
+#                    self._cr.execute(qry)
+           
                     ctx = dict(
                         active_ids=rec.invoice_ids.ids,
                         active_orders=rec.ids,
                         active_model='account.move'
                     )
+
+                    pay_action=register_payment_wizard.action_create_payments()
+		    qry = f"""
+                                            update account_move aa
+                                            set date='{rec_date_order_invoice}'
+                                        	where aa.ref='{inv_name}' or aa.name='{inv_name}'
+                    """
+                  #  print(qry)
+                    self._cr.execute(qry)
+                    qry=f"""
+                        update account_move_line aa
+                        set date=(select MM.date from account_move  MM where  MM.id=aa.move_id)
+                    	where aa.ref='{inv_name}' or aa.move_name='{inv_name}'
+"""
+                  #  print(qry)
+                    self._cr.execute(qry)
                     register_payment_wizard = self.env['account.payment.register'].with_context(ctx).create(
                         {
                             'amount': rec.invoice_ids.amount_residual,
@@ -112,7 +129,7 @@ class SaleOrderAutomated(models.Model):
                             'payment_date':rec_date_order_invoice
                         }
                     )
-                    pay_action=register_payment_wizard.action_create_payments()
+
                     self.create_cash_statement(inv_name,pay_action)
                     if seq_transaction %10 ==0:
                         self._cr.commit()
