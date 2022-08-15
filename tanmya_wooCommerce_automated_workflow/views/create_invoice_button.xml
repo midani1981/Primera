@@ -18,4 +18,12 @@
         <field name="state">code</field>
         <field name="code">action = records.create_invoice_button()</field>
     </record>
+    <record id="model_tan_woo_fix_date" model="ir.actions.server">
+        <field name="name">Fix dates</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.Fix_Date()</field>
+    </record>
 </odoo>
