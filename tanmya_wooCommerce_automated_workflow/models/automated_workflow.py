@@ -148,10 +148,6 @@ class SaleOrderAutomated(models.Model):
                 rec_date_order = rec.date_order
                 rec_date_order2 = rec_date_order + timedelta(hours=3)  # diff_hour
                 rec_date_order_invoice = datetime(rec_date_order2.year, rec_date_order2.month, rec_date_order2.day)
-                qry=f"""
-                  update sale_order set puredate='{rec_date_order_invoice}' where id={sale_order_id}
-                """
-                self._cr.execute(qry)
                 if True:
                     inv_name = None
                     inv_id= None
@@ -174,10 +170,13 @@ class SaleOrderAutomated(models.Model):
                     self._cr.execute(qry)
                     qry = f"""
                         update account_move_line aa
-                        set date=(select MM.date from account_move  MM where  MM.id=aa.move_id)
+                        set date=(select MM.date from account_move  MM where  MM.id=aa.move_id),
+                        date_maturity=(select MM.date from account_move  MM where  MM.id=aa.move_id)
                         where aa.ref='{inv_name}' or aa.move_name='{inv_name}'
 """
                     self._cr.execute(qry)
+                    
+                    
                     if seq_transaction % 10 == 0:
                         self._cr.commit()
             self._cr.commit()
