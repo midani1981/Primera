@@ -104,7 +104,7 @@ class SaleOrderAutomated(models.Model):
                         active_model='account.move'
                     )
 
-                    pay_action=register_payment_wizard.action_create_payments()
+
                     register_payment_wizard = self.env['account.payment.register'].with_context(ctx).create(
                         {
                             'amount': rec.invoice_ids.amount_residual,
@@ -115,6 +115,7 @@ class SaleOrderAutomated(models.Model):
                             'payment_date':rec_date_order_invoice
                         }
                     )
+                    pay_action=register_payment_wizard.action_create_payments()
 
                     self.create_cash_statement(inv_name,pay_action)
                     if seq_transaction %10 ==0:
