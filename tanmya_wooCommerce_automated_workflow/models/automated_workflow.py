@@ -137,7 +137,50 @@ class SaleOrderAutomated(models.Model):
 #             self._cr.rollback()
         #self._cr.autocommit(True)
 
+    def Fix_Date(self):
+            seq_transaction = 0
+            rec_date_order = datetime.strptime('01/08/2015', '%d/%m/%Y').date()
 
+            for rec1 in self.ids:
+                ++seq_transaction
+                rec = self.browse(rec1)
+                sale_order_id=rec.id
+                rec_date_order = rec.date_order
+                rec_date_order2 = rec_date_order + timedelta(hours=3)  # diff_hour
+                rec_date_order_invoice = datetime(rec_date_order2.year, rec_date_order2.month, rec_date_order2.day)
+                qry=f"""
+                  update sale_order set puredate='{rec_date_order_invoice}' where id={sale_order_id}
+                """
+                self._cr.execute(qry)
+                if True:
+                    inv_name = None
+                    inv_id= None
+                    for ii in rec.invoice_ids:
+                        inv_name = ii.name
+                        inv_id=ii.id
+
+
+                    qry = f"""
+                                            update account_move aa
+                                            set date='{rec_date_order_invoice}'
+                                            where aa.ref='{inv_name}' or aa.name='{inv_name}'
+                    """
+                    self._cr.execute(qry)
+                    qry = f"""
+                                            update account_move aa
+                                            set l10n_sa_delivery_date='{rec_date_order_invoice}'
+                                         where  aa.name='{inv_name}'
+                    """
+                    self._cr.execute(qry)
+                    qry = f"""
+                        update account_move_line aa
+                        set date=(select MM.date from account_move  MM where  MM.id=aa.move_id)
+                        where aa.ref='{inv_name}' or aa.move_name='{inv_name}'
+"""
+                    self._cr.execute(qry)
+                    if seq_transaction % 10 == 0:
+                        self._cr.commit()
+            self._cr.commit()
 
 
 
