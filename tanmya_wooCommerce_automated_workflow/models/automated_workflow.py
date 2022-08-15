@@ -168,7 +168,7 @@ class SaleOrderAutomated(models.Model):
                     self._cr.execute(qry)
                     qry = f"""
                                             update account_move aa
-                                            set l10n_sa_delivery_date='{rec_date_order_invoice}'
+                                            set l10n_sa_delivery_date='{rec_date_order_invoice}',invoice_date_due='{rec_date_order_invoice}'
                                          where  aa.name='{inv_name}'
                     """
                     self._cr.execute(qry)
