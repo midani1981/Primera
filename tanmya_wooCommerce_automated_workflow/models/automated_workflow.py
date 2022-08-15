@@ -32,7 +32,7 @@ class SaleOrderAutomated(models.Model):
         return journal_id
 
     def create_invoice_button(self):
-        try:
+#         try:
             self._cr.autocommit(False)
             odoobot = self.env['res.users'].browse(1)
             tt=datetime.now(pytz.timezone(odoobot.env.user.tz)).strftime('%z')
@@ -121,8 +121,8 @@ class SaleOrderAutomated(models.Model):
                         self._cr.commit()
             self._cr.commit()
 
-        except:
-            self._cr.rollback()
+#         except:
+#             self._cr.rollback()
         #self._cr.autocommit(True)
 
 
