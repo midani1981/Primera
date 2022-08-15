@@ -116,7 +116,18 @@ class SaleOrderAutomated(models.Model):
                         }
                     )
                     pay_action=register_payment_wizard.action_create_payments()
-
+                    qry = f"""
+                                            update account_move aa
+                                            set date='{rec_date_order_invoice}'
+                                        	where aa.ref='{inv_name}' or aa.name='{inv_name}'
+                    """
+                    self._cr.execute(qry)
+                    qry=f"""
+                        update account_move_line aa
+                        set date=(select MM.date from account_move  MM where  MM.id=aa.move_id)
+                    	where aa.ref='{inv_name}' or aa.move_name='{inv_name}'
+"""
+                    self._cr.execute(qry)
                     self.create_cash_statement(inv_name,pay_action)
                     if seq_transaction %10 ==0:
                         self._cr.commit()
